@@ -32,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   EmojiData _emojiData;
+  double _chooserWidthPercent = 1.0;
+  double _chooserHeightPercent = 1.0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +46,67 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              child: Text(
-                _emojiData == null
-                    ? 'No emoji selected'
-                    : 'Selected ${_emojiData.char}',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontFamily: 'Apple Color Emoji',
-                ),
-              ),
-              padding: EdgeInsets.only(
-                top: 30,
+              padding: EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    _emojiData == null
+                        ? 'No emoji selected'
+                        : 'Selected ${_emojiData.char}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: 'Apple Color Emoji',
+                    ),
+                  ),
+                  Slider(
+                    value: _chooserWidthPercent,
+                    label: 'Width',
+                    onChanged: (double value) {
+                      setState(() {
+                        _chooserWidthPercent = value;
+                      });
+                    },
+                  ),
+                  Slider(
+                    value: _chooserHeightPercent,
+                    label: 'Height',
+                    onChanged: (double value) {
+                      setState(() {
+                        _chooserHeightPercent = value;
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
-            EmojiChooser(
-              onSelected: (emoji) {
-                setState(() {
-                  _emojiData = emoji;
-                });
-              },
+            Expanded(
+              child: Builder(
+                builder: (context) {
+                  final size = MediaQuery.of(context).size;
+
+                  return Center(
+                    child: SizedBox(
+                      width: size.width * _chooserWidthPercent,
+                      height: size.height * _chooserHeightPercent,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.fromBorderSide(
+                            BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        child: EmojiChooser(
+                          onSelected: (emoji) {
+                            setState(() {
+                              _emojiData = emoji;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
