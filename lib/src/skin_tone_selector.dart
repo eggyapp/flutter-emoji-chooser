@@ -81,21 +81,18 @@ class SkinDotButton extends StatelessWidget {
   final Function()? onPressed;
 
   const SkinDotButton({Key? key, this.skin, this.onPressed}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width / 9,
-      height: MediaQuery.of(context).size.width / 9,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.all(0.0),
-        ),
-        autofocus: true,
-        child: SkinDot(
-          skin: skin,
-        ),
-        onPressed: onPressed,
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.all(0.0),
       ),
+      autofocus: true,
+      child: SkinDot(
+        skin: skin,
+      ),
+      onPressed: onPressed,
     );
   }
 }
