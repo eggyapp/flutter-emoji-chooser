@@ -8,44 +8,51 @@ class EmojiPage extends StatelessWidget {
   final List<EmojiInternalData> emojis;
   final Function(EmojiInternalData) onSelected;
 
-  const EmojiPage(
-      {Key? key,
-      required this.rows,
-      required this.columns,
-      required this.skin,
-      required this.emojis,
-      required this.onSelected})
-      : super(key: key);
+  const EmojiPage({
+    Key? key,
+    required this.rows,
+    required this.columns,
+    required this.skin,
+    required this.emojis,
+    required this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GridView.count(
-          crossAxisCount: columns,
-          children: List.generate(rows * columns, (index) {
-            if (index >= emojis.length) return Container();
-            var emoji = emojis[index];
-            return Center(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.all(0.0),
-                ),
-                child: Center(
-                  child: Text(
-                    emoji.charForSkin(skin),
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontFamily:
-                          'Apple Color Emoji', // Investigate what to use on other platforms
+    return LayoutBuilder(builder: (context, constraints) {
+      final size = Size(constraints.maxWidth, constraints.maxHeight);
+      final cellSize = Size(size.width / columns, size.height / rows);
+
+      return SizedBox.fromSize(
+        size: size,
+        child: GridView.count(
+            crossAxisCount: columns,
+            childAspectRatio: cellSize.aspectRatio,
+            children: List.generate(rows * columns, (index) {
+              if (index >= emojis.length) return Container();
+              var emoji = emojis[index];
+              return Center(
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.all(0.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      emoji.charForSkin(skin),
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontFamily:
+                            'Apple Color Emoji', // Investigate what to use on other platforms
+                      ),
                     ),
                   ),
+                  onPressed: () {
+                    onSelected(emoji);
+                  },
                 ),
-                onPressed: () {
-                  onSelected(emoji);
-                },
-              ),
-            );
-          })),
-    );
+              );
+            })),
+      );
+    });
   }
 }

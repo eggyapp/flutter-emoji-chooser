@@ -10,7 +10,6 @@ import 'package:emoji_chooser/src/emoji_page.dart';
 import 'package:emoji_chooser/src/group.dart';
 import 'package:emoji_chooser/src/skin_tone_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class EmojiChooser extends StatefulWidget {
@@ -24,6 +23,7 @@ class EmojiChooser extends StatefulWidget {
     this.rows = 5,
     required this.onSelected,
   }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _EmojiChooserState();
 }
@@ -191,22 +191,26 @@ class _EmojiChooserState extends State<EmojiChooser> {
           )));
       int current = index;
       selectors.add(
-        CategorySelector(
-          icon: group.icon,
-          selected: selectedCategory == group.category,
-          onSelected: () {
-            pageController.jumpToPage(current);
-          },
+        Expanded(
+          child: CategorySelector(
+            icon: group.icon,
+            selected: selectedCategory == group.category,
+            onSelected: () {
+              pageController.jumpToPage(current);
+            },
+          ),
         ),
       );
       index += group.pages.length;
     }
     selectors.add(
-      SkinToneSelector(onSkinChanged: (skin) {
-        setState(() {
-          _skin = skin;
-        });
-      }),
+      Expanded(
+        child: SkinToneSelector(onSkinChanged: (skin) {
+          setState(() {
+            _skin = skin;
+          });
+        }),
+      ),
     );
 
     return Column(
@@ -232,66 +236,66 @@ class _EmojiChooserState extends State<EmojiChooser> {
             4.0,
           ),
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: (MediaQuery.of(context).size.width / widget.columns) *
-              widget.rows,
-          child: PageView(
-            children: pages,
-            pageSnapping: true,
-            controller: pageController,
-            onPageChanged: (index) {
-              if (index < smileysNum) {
-                selectedCategory = Category.SMILEYS;
-              } else if (index < smileysNum + animalsNum) {
-                selectedCategory = Category.ANIMALS;
-              } else if (index < smileysNum + animalsNum + foodsNum) {
-                selectedCategory = Category.FOODS;
-              } else if (index <
-                  smileysNum + animalsNum + foodsNum + activitiesNum) {
-                selectedCategory = Category.ACTIVITIES;
-              } else if (index <
-                  smileysNum +
-                      animalsNum +
-                      foodsNum +
-                      activitiesNum +
-                      travelNum) {
-                selectedCategory = Category.TRAVEL;
-              } else if (index <
-                  smileysNum +
-                      animalsNum +
-                      foodsNum +
-                      activitiesNum +
-                      travelNum +
-                      objectsNum) {
-                selectedCategory = Category.OBJECTS;
-              } else if (index <
-                  smileysNum +
-                      animalsNum +
-                      foodsNum +
-                      activitiesNum +
-                      travelNum +
-                      objectsNum +
-                      symbolsNum) {
-                selectedCategory = Category.SYMBOLS;
-              } else if (index <
-                  smileysNum +
-                      animalsNum +
-                      foodsNum +
-                      activitiesNum +
-                      travelNum +
-                      objectsNum +
-                      symbolsNum +
-                      flagsNum) {
-                selectedCategory = Category.FLAGS;
-              }
-            },
+        Expanded(
+          child: SizedBox.expand(
+            child: PageView(
+              children: pages,
+              pageSnapping: true,
+              controller: pageController,
+              onPageChanged: (index) {
+                if (index < smileysNum) {
+                  selectedCategory = Category.SMILEYS;
+                } else if (index < smileysNum + animalsNum) {
+                  selectedCategory = Category.ANIMALS;
+                } else if (index < smileysNum + animalsNum + foodsNum) {
+                  selectedCategory = Category.FOODS;
+                } else if (index <
+                    smileysNum + animalsNum + foodsNum + activitiesNum) {
+                  selectedCategory = Category.ACTIVITIES;
+                } else if (index <
+                    smileysNum +
+                        animalsNum +
+                        foodsNum +
+                        activitiesNum +
+                        travelNum) {
+                  selectedCategory = Category.TRAVEL;
+                } else if (index <
+                    smileysNum +
+                        animalsNum +
+                        foodsNum +
+                        activitiesNum +
+                        travelNum +
+                        objectsNum) {
+                  selectedCategory = Category.OBJECTS;
+                } else if (index <
+                    smileysNum +
+                        animalsNum +
+                        foodsNum +
+                        activitiesNum +
+                        travelNum +
+                        objectsNum +
+                        symbolsNum) {
+                  selectedCategory = Category.SYMBOLS;
+                } else if (index <
+                    smileysNum +
+                        animalsNum +
+                        foodsNum +
+                        activitiesNum +
+                        travelNum +
+                        objectsNum +
+                        symbolsNum +
+                        flagsNum) {
+                  selectedCategory = Category.FLAGS;
+                }
+              },
+            ),
           ),
         ),
         Container(
           /* Category PICKER */
           height: 50,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: selectors,
           ),
         ),
