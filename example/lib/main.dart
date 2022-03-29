@@ -31,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  EmojiData _emojiData;
+  EmojiData? _emojiData;
   double _chooserWidthPercent = 1.0;
   double _chooserHeightPercent = 1.0;
 
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text(
                     _emojiData == null
                         ? 'No emoji selected'
-                        : 'Selected ${_emojiData.char}',
+                        : 'Selected ${_emojiData?.char}',
                     style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Apple Color Emoji',
@@ -83,7 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               child: Builder(
                 builder: (context) {
-                  final size = MediaQuery.of(context).size;
+                  final size = MediaQuery
+                      .of(context)
+                      .size;
 
                   return Center(
                     child: SizedBox(
